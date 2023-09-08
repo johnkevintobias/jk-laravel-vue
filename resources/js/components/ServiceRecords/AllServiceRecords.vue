@@ -6,19 +6,20 @@
             <thead>
             <tr>
                 <th>Record ID</th>
-                <th>Employee ID</th>
+                <th>Employee</th>
                 <th>Date From</th>
                 <th>Date To</th>
                 <th>Position</th>
                 <th>Salary</th>
+                <th>Action</th>
             </tr>
             </thead>
             <tbody>
             <tr v-for="service_record in service_records" :key="service_record.id">
                 <td>{{ service_record.id }}</td>
-                <td>{{ service_record.employee_id }}</td>
-                <td>{{ service_record.date_from }}</td>
-                <td>{{ service_record.date_to }}</td>
+                <td>{{ '(#'+service_record.employee_id+') '+service_record.employee.first_name+' '+service_record.employee.last_name }}</td>
+                <td>{{ formatDate(service_record.date_from) }}</td>
+                <td>{{ formatDate(service_record.date_to) }}</td>
                 <td>{{ service_record.position }}</td>
                 <td>{{ service_record.salary }}</td>
                 <td>
@@ -55,6 +56,14 @@
                         let i = this.service_records.map(data => data.id).indexOf(id);
                         this.service_records.splice(i, 1)
                     });
+            },
+            formatDate(dateString) {
+              const date = new Date(dateString);
+              return date.toLocaleDateString('en-US', {
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric',
+              });
             }
         }
     }

@@ -10,7 +10,10 @@
                 <th>Middle Name</th>
                 <th>Last Name</th>
                 <th>Date of Birth</th>
+                <th>Gender</th>
                 <th>Marital Status</th>
+                <th>Current Position</th>
+                <th>Current Salary</th>
                 <th>Actions</th>
             </tr>
             </thead>
@@ -20,9 +23,13 @@
                 <td>{{ employee.first_name }}</td>
                 <td>{{ employee.middle_name }}</td>
                 <td>{{ employee.last_name }}</td>
-                <td>{{ employee.birth_date }}</td>
-                <td>{{ employee.gender }}</td>
-                <td>{{ employee.marital_status }}</td>
+                <td>{{ formatDate(employee.birth_date) }}</td>
+                <td>{{ upperFormat(employee.gender) }}</td>
+                <td>{{ upperFormat(employee.marital_status) }}</td>
+                <td v-if="checkProperty(employee.latest_service_record, 'position')">{{ employee.latest_service_record.position }}</td>
+                <td v-else></td>
+                <td v-if="checkProperty(employee.latest_service_record, 'salary')">{{ employee.latest_service_record.salary }}</td>
+                <td v-else></td>
                 <td>
                     <div class="btn-group" role="group">
                         <router-link :to="{name: 'edit-employee', params: { id: employee.id }}" class="btn btn-success">Edit</router-link>
@@ -57,6 +64,27 @@
                         let i = this.employees.map(data => data.id).indexOf(id);
                         this.employees.splice(i, 1)
                     });
+            },
+            upperFormat(name) {
+              const capitalizedFirst = name[0].toUpperCase();
+              const rest = name.slice(1);
+
+              return capitalizedFirst + rest;
+            },
+            formatDate(dateString) {
+              const date = new Date(dateString);
+              return date.toLocaleDateString('en-US', {
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric',
+              });
+            },
+            checkProperty(employeeObject, employeeProperty) {
+                if (employeeObject != null && employeeProperty in employeeObject) {
+                    return true;
+                } else {
+                  return false;
+                }
             }
         }
     }

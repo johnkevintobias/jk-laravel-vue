@@ -17,4 +17,16 @@ class Employee extends Model
         'marital_status', 
         'marital_status'
     ];    
+
+    public function serviceRecords()
+    {
+        return $this->hasMany(ServiceRecord::class, 'employee_id');
+    }
+
+    public function latestServiceRecord()
+    {
+        return $this->hasOne(ServiceRecord::class, 'employee_id')
+            ->select('employee_id', 'position', 'salary', 'date_from')
+            ->orderByDesc('date_from');
+    }
 }
